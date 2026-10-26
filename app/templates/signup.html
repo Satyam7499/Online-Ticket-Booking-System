@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h2>Create Account</h2>
+  <form method="POST" id="signup-form" novalidate>
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="name" placeholder=" " required>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder=" " required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" placeholder=" " required minlength="6">
+    <div class="strength-meter">
+      <div class="strength-bar" id="strength-bar"></div>
+    </div>
+    <small id="strength-text" class="field-hint">Use 6+ characters with letters &amp; numbers</small>
+
+    <label for="confirm">Confirm Password</label>
+    <input type="password" id="confirm" name="confirm" placeholder=" " required>
+    <small id="match-text" class="field-hint"></small>
+
+    <button type="submit" class="btn">Sign Up</button>
+  </form>
+  <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login</a></p>
+</div>
+
+<script>
+  const password = document.getElementById('password');
+  const confirm  = document.getElementById('confirm');
+  const bar      = document.getElementById('strength-bar');
+  const sText    = document.getElementById('strength-text');
+  const mText    = document.getElementById('match-text');
+  const form     = document.getElementById('signup-form');
+
+  // ----- Password strength -----
+  function scorePassword(pw) {
+    let score = 0;
+    if (!pw) return 0;
+    if (pw.length >= 6) score++;
+    if (pw.length >= 10) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+    return score; // 0..5
+  }
+
+  password.addEventListener('input', () => {
+    const score = scorePassword(password.value);
+    bar.className = 'strength-bar';
+    if (password.value.length === 0) {
+      bar.style.width = '0';
+      sText.textContent = 'Use 6+ characters with letters & numbers';
+      sText.className = 'field-hint';
+      return;
+    }
+    if (score <= 2) {
+      bar.classList.add('weak');
+      sText.textContent = 'Weak password';
+      sText.className = 'field-hint error';
+    } else if (score === 3 || score === 4) {
+      bar.classList.add('medium');
+      sText.textContent = 'Medium password';
+      sText.className = 'field-hint warn';
+    } else {
+      bar.classList.add('strong');
+      sText.textContent = 'Strong password';
+      sText.className = 'field-hint success';
+    }
+    checkMatch();
+  });
+
+  // ----- Confirm match -----
+  function checkMatch() {
+    if (!confirm.value) {
+      mText.textContent = '';
+      mText.className = 'field-hint';
+      confirm.classList.remove('input-error', 'input-success');
+      return;
+    }
+    if (confirm.value === password.value) {
+      mText.textContent = '✔ Passwords match';
+      mText.className = 'field-hint success';
+      confirm.classList.remove('input-error');
+      confirm.classList.add('input-success');
+    } else {
+      mText.textContent = '✖ Passwords do not match';
+      mText.className = 'field-hint error';
+      confirm.classList.remove('input-success');
+      confirm.classList.add('input-error');
+    }
+  }
+
+  confirm.addEventListener('input', checkMatch);
+  password.addEventListener('input', checkMatch);
+
+  // ----- Block submit if mismatch -----
+  form.addEventListener('submit', (e) => {
+    if (password.value !== confirm.value) {
+      e.preventDefault();
+      confirm.focus();
+    }
+  });
+</script>
+{% endblock %}

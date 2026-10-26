@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Payment{% endblock %}
+{% block content %}
+<div class="form-card">
+  <h2>Confirm & Pay</h2>
+  <p><strong>Event:</strong> {{ event.name }}</p>
+  <p><strong>Seat:</strong> {{ seat.seat_no }}</p>
+  <p><strong>Date:</strong> {{ event.date }}</p>
+  <p><strong>Amount:</strong> ₹{{ "%.2f"|format(event.price) }}</p>
+  <p class="hint">This is a simulated payment for demo purposes. Seat is held for 3 minutes.</p>
+  <form method="POST">
+    <button type="submit" class="btn">Pay Now</button>
+  </form>
+</div>
+{% endblock %}

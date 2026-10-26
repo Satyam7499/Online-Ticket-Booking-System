@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+{% block content %}
+<div class="events-page">
+  <div class="page-header">
+    <h2>Available Events</h2>
+    <p class="subtitle">Find your next experience and book your seat in seconds.</p>
+  </div>
+
+  {% if events %}
+  <div class="grid">
+    {% for e in events %}
+    <div class="card event-card">
+      <div class="event-badge">{{ e.category if e.category else "Event" }}</div>
+      <h3>{{ e.name }}</h3>
+      <p class="event-meta">📅 {{ e.date }}</p>
+      <p class="event-meta">📍 {{ e.venue }}</p>
+      <p class="event-desc">
+        {{ e.description if e.description else "Join us for an unforgettable experience." }}
+      </p>
+      <div class="event-footer">
+        <span class="price">₹{{ "%.2f"|format(e.price) }}</span>
+        <a href="{{ url_for('booking.select_seat', event_id=e.id) }}" class="btn">Book Now</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3>No events available right now</h3>
+    <p>Check back soon — new events are added regularly.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

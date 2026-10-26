@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Your Ticket{% endblock %}
+{% block content %}
+<div class="ticket-card">
+  <h2>🎫 E-Ticket</h2>
+  <p><strong>Event:</strong> {{ booking.event.name }}</p>
+  <p><strong>Seat:</strong> {{ booking.seat.seat_no }}</p>
+  <p><strong>Date:</strong> {{ booking.event.date }}</p>
+  <p><strong>Venue:</strong> {{ booking.event.venue }}</p>
+  <p><strong>Booking ID:</strong> #{{ booking.id }}</p>
+  <p><strong>Status:</strong> {{ booking.payment_status }}</p>
+  <img src="{{ url_for('static', filename='tickets/' ~ booking.id ~ '.png') }}" alt="QR Code" class="qr">
+  <a href="{{ url_for('static', filename='tickets/' ~ booking.id ~ '.png') }}" download class="btn">Download Ticket QR</a>
+</div>
+{% endblock %}

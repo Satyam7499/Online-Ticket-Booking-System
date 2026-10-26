@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Select Seat{% endblock %}
+{% block content %}
+<h2>{{ event.name }}</h2>
+<p>{{ event.date }} • {{ event.venue }} • ₹{{ "%.2f"|format(event.price) }}</p>
+
+<div class="legend">
+  <span class="dot available"></span> Available
+  <span class="dot locked"></span> Held by another user
+  <span class="dot booked"></span> Booked
+</div>
+
+<div class="seat-grid">
+  {% for seat in seats %}
+    {% if seat.is_booked %}
+      <div class="seat booked">{{ seat.seat_no }}</div>
+    {% elif seat.is_locked(current_user.id) %}
+      <div class="seat locked">{{ seat.seat_no }}</div>
+    {% else %}
+      <form method="POST" action="{{ url_for('booking.lock_seat', seat_id=seat.id) }}">
+        <button type="submit" class="seat available">{{ seat.seat_no }}</button>
+      </form>
+    {% endif %}
+  {% endfor %}
+</div>
+{% endblock %}

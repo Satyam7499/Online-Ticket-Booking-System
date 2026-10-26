@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Manage Events{% endblock %}
+{% block content %}
+<h2>Manage Events</h2>
+<a href="{{ url_for('admin.add_event') }}" class="btn">+ Add Event</a>
+<table class="table">
+  <tr><th>Name</th><th>Date</th><th>Venue</th><th>Price</th><th>Seats</th><th>Actions</th></tr>
+  {% for e in events %}
+  <tr>
+    <td>{{ e.name }}</td>
+    <td>{{ e.date }}</td>
+    <td>{{ e.venue }}</td>
+    <td>₹{{ "%.2f"|format(e.price) }}</td>
+    <td>{{ e.total_seats }}</td>
+    <td>
+      <a href="{{ url_for('admin.edit_event', event_id=e.id) }}">Edit</a>
+      <form action="{{ url_for('admin.delete_event', event_id=e.id) }}" method="POST" style="display:inline">
+        <button type="submit" class="link-btn" onclick="return confirm('Delete this event?')">Delete</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

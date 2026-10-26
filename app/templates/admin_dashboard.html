@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h2>Admin Dashboard</h2>
+<div class="stats">
+  <div class="stat-card"><h3>{{ total_events }}</h3><p>Total Events</p></div>
+  <div class="stat-card"><h3>{{ total_bookings }}</h3><p>Confirmed Bookings</p></div>
+  <div class="stat-card"><h3>₹{{ "%.2f"|format(revenue) }}</h3><p>Total Revenue</p></div>
+</div>
+<div class="admin-links">
+  <a href="{{ url_for('admin.manage_events') }}" class="btn">Manage Events</a>
+  <a href="{{ url_for('admin.all_bookings') }}" class="btn">View All Bookings</a>
+</div>
+{% endblock %}
